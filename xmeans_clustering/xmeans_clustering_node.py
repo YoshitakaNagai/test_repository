@@ -98,8 +98,8 @@ class XMeans:
         def bic(self):
             return -2 * self.log_likelihood() + self.df * np.log(self.size)
 
-if __name__ == "__main__":
-# def main():
+#if __name__ == "__main__":
+def main():
     import matplotlib.pyplot as plt
     
     print("start!")
