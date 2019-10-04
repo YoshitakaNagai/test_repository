@@ -1,5 +1,5 @@
 """
-This code was recoded partially from original code "https://gist.github.com/yasaichi/254a060eff56a3b3b858".
+This code was recoded partially from the original code "https://gist.github.com/yasaichi/254a060eff56a3b3b858".
 """
 
 """
