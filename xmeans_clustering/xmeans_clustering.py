@@ -1,3 +1,5 @@
+#!/usr/bin
+
 """
 This code was recoded partially from the original code "https://gist.github.com/yasaichi/254a060eff56a3b3b858".
 """
@@ -96,13 +98,16 @@ class XMeans:
         def bic(self):
             return -2 * self.log_likelihood() + self.df * np.log(self.size)
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
+def main():
     import matplotlib.pyplot as plt
-
+    
+    print("start!")
+    
     # データの準備
-    x = np.array([np.random.normal(loc, 0.1, 20) for loc in np.repeat([1,2], 2)]).flatten()
-    y = np.array([np.random.normal(loc, 0.1, 20) for loc in np.tile([1,2], 2)]).flatten()
-    z = np.array([np.random.normal(loc, 0.1, 20) for loc in np.tile([1,2], 2)]).flatten()
+    x = np.array([np.random.normal(loc, 0.1, 2500) for loc in np.repeat([1,2], 2)]).flatten()
+    y = np.array([np.random.normal(loc, 0.1, 2500) for loc in np.tile([1,2], 2)]).flatten()
+    z = np.array([np.random.normal(loc, 0.1, 2500) for loc in np.tile([1,2], 2)]).flatten()
 
     # クラスタリングの実行
     x_means = XMeans(random_state = 1).fit(np.c_[x,y,z]) 
@@ -110,7 +115,7 @@ if __name__ == "__main__":
     print(x_means.cluster_centers_)
     print(x_means.cluster_log_likelihoods_)
     print(x_means.cluster_sizes_)
-
+"""
     # 結果をプロット
     plt.rcParams["font.family"] = "Hiragino Kaku Gothic Pro"
     #plt.scatter(x, y, z, c = x_means.labels_, s = 30)
@@ -129,3 +134,4 @@ if __name__ == "__main__":
     plt.title("改良x-means法の実行結果  参考: 石岡(2000)")
     plt.show()
     # plt.savefig("clustering.png", dpi = 200)
+"""
