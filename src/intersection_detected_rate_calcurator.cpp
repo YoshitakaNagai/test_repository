@@ -12,9 +12,10 @@ public:
 private:
 	ros::NodeHandle n;
 	ros::Subscriber flag_sub;
+	bool callback_flag;
+	bool intersection_flag;
 	int callback_cnt;
 	int detect_cnt;
-	float detect_rate;
 };
 
 
@@ -29,31 +30,39 @@ int main(int argc, char** argv)
 
 IntersectionDetectRate::IntersectionDetectRate(void)
 {
-	flag_sub = n.subscribe("/intersectioin_flag", 1, &IntersectionDetectRate::intersection_flag_callback, this);
-	callback_cnt = 0;
-	detect_cnt = 0;
-	detect_rate = 0.0;
+	flag_sub = n.subscribe("/intersection_flag", 1, &IntersectionDetectRate::intersection_flag_callback, this);
+	callback_flag = false;
 }
 
 
 void IntersectionDetectRate::execution(void)
 {
-	ros::spin();
+	intersection_flag = false;
+	callback_cnt = 0;
+	detect_cnt = 0;
+    ros::Rate loop_rate(1000);
+    
+	while(ros::ok()){
+		if(callback_flag){
+			callback_cnt++;
+			if(intersection_flag){
+				detect_cnt++;
+			}
+			std::cout << "callback_cnt : " << callback_cnt << std::endl;
+			std::cout << "detect_cnt : " << detect_cnt << std::endl;
+
+			callback_flag = false;
+		}
+		ros::spinOnce();
+		// loop_rate.sleep();
+	}
 }
 
 
 void IntersectionDetectRate::intersection_flag_callback(const std_msgs::BoolConstPtr& msg)
 {
-	callback_cnt++;
-
-	bool intersectioin_flag = msg->data;
-	if(intersectioin_flag){
-		detect_cnt++;
-	}
-
-	detect_rate = (float)(detect_cnt / callback_cnt);
-
-	std::cout << "intersection detect rate = " << detect_rate << std::endl;
+	intersection_flag = msg->data;
+	callback_flag = true;
 }
 
 
