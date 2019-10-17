@@ -102,7 +102,6 @@ if __name__ == "__main__":
 # def main():
     import matplotlib.pyplot as plt
     
-    print("start!")
     
     # データの準備
     x = np.array([np.random.normal(loc, 0.1, 2500) for loc in np.repeat([1,2], 2)]).flatten()
@@ -110,6 +109,7 @@ if __name__ == "__main__":
     z = np.array([np.random.normal(loc, 0.1, 2500) for loc in np.tile([1,2], 2)]).flatten()
 
     # クラスタリングの実行
+    print("start!")
     x_means = XMeans(random_state = 1).fit(np.c_[x,y,z]) 
     print(x_means.labels_)
     print(x_means.cluster_centers_)
