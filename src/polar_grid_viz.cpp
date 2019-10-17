@@ -14,7 +14,9 @@ class PolarGridViz
     private:
         const int CIRCLE_NUM = 20;
         const int LINE_NUM = 120;
-        float RANGE;
+        const double MAX_RANGE = 20.0;
+        double RANGE;
+        double dTheta = 2 * M_PI / (double)LINE_NUM;
 
         ros::NodeHandle n;
         ros::Publisher polar_circles_publisher;
@@ -26,7 +28,7 @@ class PolarGridViz
 }
 
 
-int main()
+int main(int argc, char** argv)
 {
     ros::init(argc, argv, "polar_grid_viz");
     
@@ -47,7 +49,7 @@ PolarGridViz::PolarGridViz(void)
     line.x1 = 0.0;
     line.y1 = 0.0;
     line_array.header = "/base_link"
-    lin_array.lines.resize(LINE_NUM);
+    line_array.lines.resize(LINE_NUM);
 
     polar_circles_publisher = n.advertize<jsk_recognition_msgs::Circle2DArray>("/polar_circles");
     polar_lines_publisher = n.advertize<jsk_recognition_msgs::LineArray>("/polar_lines");
@@ -58,14 +60,23 @@ PolarGridViz::exe(void)
 {
     ros::Rate r(100);
     while(ros::ok()){
+        for(int n = 0; n < CIRCLE_NUM; n++){
+            circle.radius = (double)n;
+            circle_array[n] = circle;
+        }
+
+        double theta = 0.0;
+        for(int n = 0; n < LINE_NUM; n++){
+            line.x2 = MAX_RANGE * cos(theta);
+            line.x2 = MAX_RANGE * sin(theta);
+            line_array[n] = line;
+            theta += dTheta;
+        }
         
+        polar_circles_publisher.publish(circle_array);
+        polar_lines_publisher.publish(line_array);
 
         r.sleep();
         ros::spinOnce();
     }
 }
-
-
-
-
-
