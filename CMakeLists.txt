@@ -20,6 +20,10 @@ find_package(catkin REQUIRED COMPONENTS
   	sensor_msgs
   	std_msgs
   	tf
+	cv_bridge
+	image_transport
+	visualization_msgs
+	jsk_recognition_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -183,6 +187,17 @@ target_link_libraries(intersection_detected_rate_calcurator
 	${PCL_LIBRARIES}
 )
 
+add_executable(image_publisher src/image_publisher.cpp)
+target_link_libraries(image_publisher
+	${catkin_LIBRARIES}
+	${PCL_LIBRARIES}
+)
+
+add_executable(polar_grid_viz src/polar_grid_viz.cpp)
+target_link_libraries(polar_grid_viz
+	${catkin_LIBRARIES}
+	${PCL_LIBRARIES}
+)
 #############
 ## Install ##
 #############

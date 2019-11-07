@@ -25,7 +25,7 @@ class PolarGridViz
         jsk_recognition_msgs::Circle2DArray circle_array;
         jsk_recognition_msgs::Line line;
         jsk_recognition_msgs::LineArray line_array;
-}
+};
 
 
 int main(int argc, char** argv)
@@ -41,35 +41,36 @@ int main(int argc, char** argv)
 
 PolarGridViz::PolarGridViz(void)
 {
-    circle.header = "/base_line";
-    circle.x = 0.0;
-    circle.y = 0.0;
-    circle_array.header = "/base_link";
+    circle_array.header.frame_id = "/velodyne";
+    circle.header.stamp = ros::Time::now();
     circle_array.circles.resize(CIRCLE_NUM);
-    line.x1 = 0.0;
-    line.y1 = 0.0;
-    line_array.header = "/base_link"
+    line_array.header.frame_id = "/velodyne";
+	line_array.header.stamp = ros::Time::now();
     line_array.lines.resize(LINE_NUM);
 
-    polar_circles_publisher = n.advertize<jsk_recognition_msgs::Circle2DArray>("/polar_circles");
-    polar_lines_publisher = n.advertize<jsk_recognition_msgs::LineArray>("/polar_lines");
+    polar_circles_publisher = n.advertise<jsk_recognition_msgs::Circle2DArray>("/polar_circles", 10);
+    polar_lines_publisher = n.advertise<jsk_recognition_msgs::LineArray>("/polar_lines", 10);
 }
 
 
-PolarGridViz::exe(void)
+void PolarGridViz::exe(void)
 {
     ros::Rate r(100);
     while(ros::ok()){
-        for(int n = 0; n < CIRCLE_NUM; n++){
-            circle.radius = (double)n;
-            circle_array[n] = circle;
+        for(size_t n = 0; n < (size_t)CIRCLE_NUM; n++){
+    		circle_array.circles[n].header.frame_id = "/velodyne";
+    		circle_array.circles[n].header.stamp = ros::Time::now();
+            circle_array.circles[n].x = 0.0;
+            circle_array.circles[n].y = 0.0;
+            circle_array.circles[n].radius = (double)n;
         }
 
         double theta = 0.0;
-        for(int n = 0; n < LINE_NUM; n++){
-            line.x2 = MAX_RANGE * cos(theta);
-            line.x2 = MAX_RANGE * sin(theta);
-            line_array[n] = line;
+        for(size_t n = 0; n < (size_t)LINE_NUM; n++){
+    		/* line_array.lines[n].header.frame_id = "/velodyne"; */
+			/* line_array.lines[n].header.stamp = ros::Time::now(); */
+            line_array.lines[n].x2 = MAX_RANGE * cos(theta);
+            line_array.lines[n].y2 = MAX_RANGE * sin(theta);
             theta += dTheta;
         }
         
