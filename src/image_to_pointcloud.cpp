@@ -119,7 +119,7 @@ void ImageToPointCloud::input_depth_image(void)
 
 	for(int row = 0; row < 64; row++){
 		for(int col = 0; col < 2048; col++){
-			depth_info.push_back(src_img[row][col]);
+			depth_info.push_back(100 * src_img[row][col]);
 		}
 	}
 
